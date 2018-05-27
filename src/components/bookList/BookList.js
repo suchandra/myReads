@@ -1,26 +1,21 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types'
-//import { Link } from 'react-router-dom'
 
 
 class BookList extends Component {
 
     static propTypes = {
-        books: PropTypes.array.isRequired,
+        book: PropTypes.object.isRequired,
         updateShelf: PropTypes.func.isRequired,
     }
 
     render() {
-        const { books, updateShelf, mode } = this.props
+        const { book, updateShelf, mode } = this.props
         return(
-            <div className="bookshelf">
-                <div className="bookshelf-books">
-                    <ol className="books-grid">
-                        {books && books.map((book) => (
-                        <li>
+                         <li>
                             <div className="book">
                                 <div className="book-top">
-                                    <div className="book-cover" style={{ width: 128, height: 193, backgroundImage: `url(${book.imageLinks.thumbnail})`}}></div>
+                                    <div className="book-cover" style={{ width: 128, height: 193, backgroundImage: `url(${book.imageLinks && book.imageLinks.thumbnail})`}}></div>
                                     <div className="book-shelf-changer">
                                         <select
                                             onChange={(event) => updateShelf(book, event)}>
@@ -59,10 +54,17 @@ class BookList extends Component {
                                                     key={book.id + 'read'}>
                                                 <span>Read</span>
                                             </option>
-                                            <option id={book.id} value="none"
-                                                    key={book.id + 'none'}>
-                                                <span>None</span>
-                                            </option>
+                                          <option style={{ display: book.shelf == "none" ? 'block': 'none'}}
+                                                  id={book.id} value="none"
+                                                  key={book.id + 'noneSelected'}>
+                                            <span> &radic;   </span>
+                                            <span>None</span>
+                                          </option>
+                                          <option style={{ display: book.shelf != "none" ? 'block': 'none'}}
+                                                  id={book.id} value="none"
+                                                  key={book.id + 'none'}>
+                                            <span>None</span>
+                                          </option>
                                         </select>
                                     </div>
                                 </div>
@@ -70,10 +72,7 @@ class BookList extends Component {
                                 <div className="book-title">{book.authors}</div>
                             </div>
                         </li>
-                        ))}
-                    </ol>
-                </div>
-            </div>
+
         )
     }
 }

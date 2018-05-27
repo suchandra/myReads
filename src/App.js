@@ -57,15 +57,18 @@ class BooksApp extends React.Component {
 
     mapSearchedBookstate = (books)  => {
         let bookShelfCollection = this.state.books;
-        books.forEach(function(value,index) {
+        books && books.forEach(function(value,index) {
             let book = bookShelfCollection.filter( book => book.id === value.id );
             if(book.length > 0) {
                 value['shelf'] = book[0].shelf;
+            } else {
+              value['shelf'] = 'none';
             }
         })
         this.setState(() => ({
             searchedBooks: books
         }))
+      console.log(this.state.searchedBooks)
     }
 
     updateSearchedListState = (updatedBook, shelf) => {
@@ -88,7 +91,15 @@ class BooksApp extends React.Component {
                             </div>
                         </div>
                         <div className="search-books-results">
-                            <BookList books={this.state.searchedBooks} updateShelf={this.updateShelf}/>
+                          <div className="bookshelf">
+                            <div className="bookshelf-books">
+                              <ol className="books-grid">
+                                {this.state.searchedBooks && this.state.searchedBooks.map((book) => (
+                                  <BookList book={book} updateShelf={this.updateShelf}/>
+                                ))}
+                              </ol>
+                            </div>
+                          </div>
                         </div>
                     </div>
                 )}/>
@@ -105,65 +116,8 @@ class BooksApp extends React.Component {
                                         <div className="bookshelf-books">
                                             <ol className="books-grid">
                                                 {this.state[mode.replace(/ /g, "_").toLocaleLowerCase()] && this.state[mode.replace(/ /g, "_").toLocaleLowerCase()].map((book) => (
-                                                    <li>
-                                                        <div className="book">
-                                                            <div className="book-top">
-                                                                <div className="book-cover" style={{
-                                                                    width: 128,
-                                                                    height: 193,
-                                                                    backgroundImage: `url(${book.imageLinks.thumbnail})`
-                                                                }}></div>
-                                                                <div className="book-shelf-changer">
-                                                                    <select
-                                                                        onChange={(event) => this.updateShelf(book, event)}>
-                                                                        <option value="none" disabled>Move to...
-                                                                        </option>
-                                                                        <option style={{ display: mode == "Currently Reading" ? 'block': 'none'}}
-                                                                                id={book.id} value="currentlyReading"
-                                                                                key={book.id + 'cuttentlyReadingSelected'}>
-                                                                             <span> &radic;   </span>
-                                                                             <span>Currently Reading</span>
-                                                                        </option>
-                                                                        <option style={{ display: mode != "Currently Reading" ? 'block': 'none'}}
-                                                                                id={book.id} value="currentlyReading"
-                                                                                key={book.id + 'cuttentlyReading'}>
-                                                                            Currently Reading
-                                                                        </option>
-                                                                        <option style={{ display: mode == "Want To Read" ? 'block': 'none'}}
-                                                                                id={book.id} value="wantToRead"
-                                                                                key={book.id + 'wantToReadSelected'}>
-                                                                            <span> &radic;   </span>
-                                                                            <span>Want to Read</span>
-                                                                        </option>
-                                                                        <option style={{ display: mode != "Want To Read" ? 'block': 'none'}}
-                                                                                id={book.id} value="wantToRead"
-                                                                                key={book.id + 'wantToRead'}>
-                                                                            <span>Want to Read</span>
-                                                                        </option>
-                                                                        <option style={{ display: mode == "Read" ? 'block': 'none'}}
-                                                                                id={book.id} value="read"
-                                                                                key={book.id + 'readSelected'}>
-                                                                            <span> &radic;   </span>
-                                                                            <span>Read</span>
-                                                                        </option>
-                                                                        <option style={{ display: mode != "Read" ? 'block': 'none'}}
-                                                                                id={book.id} value="read"
-                                                                                key={book.id + 'read'}>
-                                                                            <span>Read</span>
-                                                                        </option>
-                                                                        <option id={book.id} value="none"
-                                                                                key={book.id + 'none'}>
-                                                                            <span>None</span>
-                                                                        </option>
-                                                                    </select>
-                                                                </div>
-                                                            </div>
-                                                            <div className="book-title">{book.title}</div>
-                                                            {book.authors.map((author) => (
-                                                                <div className="book-authors">{author}</div>
-                                                            ))}
-                                                        </div>
-                                                    </li>
+                                                  <BookList book={book} updateShelf={this.updateShelf}/>
+
                                                 ))}
                                             </ol>
                                         </div>
