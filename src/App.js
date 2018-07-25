@@ -50,7 +50,11 @@ class BooksApp extends React.Component {
         let searchTerm = event.target.value;
         BooksAPI.search(searchTerm)
             .then((response) => {
+              if(response && !response['error']) {
                 this.mapSearchedBookstate(response);
+              } else {
+                alert('An error occured');
+              }
 
             });
     }
