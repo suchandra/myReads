@@ -53,9 +53,9 @@ class BooksApp extends React.Component {
               if(response && !response['error']) {
                 this.mapSearchedBookstate(response);
               } else {
-                alert('An error occured');
-              }
-
+                  this.setState(() => ({
+                      searchedBooks: []
+                  }))}
             });
     }
 
